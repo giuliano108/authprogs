@@ -200,6 +200,7 @@ class AuthProgs(object):  # pylint: disable-msg=R0902
         if self.yamldocs:
             return
 
+        self.yamldocs = []
         loadfiles = []
         if self.configfile:
             loadfiles.append(self.configfile)
@@ -213,21 +214,12 @@ class AuthProgs(object):  # pylint: disable-msg=R0902
                      if os.path.isfile(f) and
                      not os.path.basename(f).startswith('.')])
 
-        merged_configfile = StringIO.StringIO()
-        merged_configfile.write('-\n')
         for thefile in loadfiles:
             self.logdebug('reading in config file %s\n' % thefile)
-            merged_configfile.write(open(thefile).read())
-            merged_configfile.write('\n-\n')
-        merged_configfile.seek(0)
-        self.logdebug('merged log file: """\n%s\n"""\n' %
-                      merged_configfile.read())
-        merged_configfile.seek(0)
-
-        try:
-            self.yamldocs = yaml.load(merged_configfile, Loader=Loader)
-        except (yaml.scanner.ScannerError, yaml.parser.ParserError):
-            self.raise_and_log_error(ConfigError, 'error parsing config.')
+            try:
+                self.yamldocs.append(yaml.load(open(thefile).read(), Loader=Loader))
+            except (yaml.scanner.ScannerError, yaml.parser.ParserError):
+                self.raise_and_log_error(ConfigError, 'error parsing config.')
 
         self.logdebug('parsed_rules:\n%s\n' % pretty(self.yamldocs))
 
