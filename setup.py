@@ -138,12 +138,10 @@ setup(
     scripts=['bin/authprogs'],
     packages=['authprogs'],
     data_files=[
-        ('share/man/man1/', ['doc/authprogs.1']),
         ('share/doc/authprogs/',
-         ['AUTHORS', 'COPYING', 'INSTALL', 'README',
-          'TODO', 'doc/authprogs.html'])],
+         ['AUTHORS.md', 'COPYING', 'INSTALL.md', 'README.md',
+          'TODO.md', 'doc/authprogs.md'])],
     test_suite='authprogs.tests',
     install_requires=['pyyaml'],
     zip_safe=False,
-    cmdclass={"install": APInstall, "sdist": APSdist}
 )
